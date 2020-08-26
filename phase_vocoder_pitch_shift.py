@@ -10,11 +10,15 @@ fader2 = osc["/1/fader2"].sig
 
 audio_in = Input()
 
-pva = PVAnal(audio_in, size=2048)
+up = audio_in * fader1
+down = audio_in * fader2
+
+pva = PVAnal(up, size=2048)
+pva2 = PVAnal(down, size=2048)
 
 pvt = PVTranspose(pva, 0.5)
-t2 = PVTranspose(pva, 2)
+pvt2 = PVTranspose(pva2, 2)
 
-pvs = PVSynth([pvt,t2], [osc[f"/1/fader{i}"].sig for i in range(1,3)]).out()
+pvs = PVSynth(PVMix(pvt, pvt2)).out()
 audio_in*Sig(0.6).out()
 s.start()
