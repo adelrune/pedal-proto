@@ -1,7 +1,7 @@
 from pyo import *
 from pyo_osc_tools import OSCToSig
 
-osc = OSCToSig(idle_timer=False)
+osc = OSCToSig(idle_timer=False, port=8000)
 fader1 = osc["/1/fader1"].sig
 fader2 = osc["/1/fader2"].sig
 
