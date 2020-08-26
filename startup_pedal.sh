@@ -1,0 +1,1 @@
+PYTHONSTARTUP=$1 python3
