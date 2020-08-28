@@ -2,11 +2,7 @@ from pyo import *
 from pyo_osc_tools import OSCToSig
 
 s = Server(audio="jack").boot()
-
-
-osc = OSCToSig(idle_timer=False, port=8000)
-
-
+osc = OSCToSig(idle_timer=False, port=8000, ramp=0, sig_size=1)
 
 recorder = None
 audio_in = Input()
@@ -38,7 +34,7 @@ def push_recording():
     recording = False
 
 push_sig = osc[1]["push1"].sig
-push_trig = Thresh(push_sig, threshold=0.99)
+push_trig = Thresh(push_sig, threshold=0.9999, dir=0)
 push_tf = TrigFunc(push_trig, push_recording)
 
 s.start()

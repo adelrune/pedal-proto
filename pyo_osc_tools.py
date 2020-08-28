@@ -11,6 +11,7 @@ class _OSCNode:
         self._child_nodes = {}
         self.address = address
         self.sig = SigTo([0]*sig_size, time=ramp)
+        self.sig_size = sig_size
         self.idle = True
         self.idle_timer = idle_timer
         self.ramp = ramp
@@ -34,7 +35,7 @@ class _OSCNode:
 
     def _get_eff(self, key):
         if key not in self._child_nodes:
-            self._child_nodes[key] = _OSCNode(self.idle_timer, self.ramp, address=key)
+            self._child_nodes[key] = _OSCNode(self.idle_timer, self.ramp, address=key, sig_size=self.sig_size)
         return self._child_nodes[key]
 
     def __getitem__(self, key):
@@ -45,7 +46,7 @@ class OSCToSig:
     """Converts any osc messages sent to that port and osc address to a tree of pyo sigs"""
     def __init__(self, port=13001, idle_timer=0.1, ramp=0.01, osc_address_pattern="/*", sig_size=1):
         self._get_eff = self.__getitem__
-        self._root_node = _OSCNode(idle_timer, ramp)
+        self._root_node = _OSCNode(idle_timer, ramp, sig_size)
         # values of y between these ranges will go from 0 to 1
         def receive_msg(address, *args):
             addresses = address.split("/")[1:]
